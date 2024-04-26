@@ -1,33 +1,13 @@
+import { NavigationContainer } from '@react-navigation/native';
+import React from 'react';
 
-	import { NavigationContainer } from "@react-navigation/native";
-	import { createStackNavigator } from "@react-navigation/stack";
+import { AppRoutes } from './app.routes';
+import { AuthRoutes } from './auth';
 
-	import Modal from "../screens/modal";
-	import TabNavigator from "./tab-navigator";
+import { useAuthContext } from '~/context/auth-context';
 
-	export type RootStackParamList = {
-		TabNavigator: undefined;
-		Modal: undefined;
-	};
+export default function RootStack() {
+  const { signIn } = useAuthContext();
 
-	const Stack = createStackNavigator<RootStackParamList>();
-
-	export default function RootStack() {
-		return (
-			<NavigationContainer>
-				<Stack.Navigator initialRouteName="TabNavigator">
-					<Stack.Screen
-						name="TabNavigator"
-						component={TabNavigator}
-						options={{ headerShown: false }}
-					/>
-					<Stack.Screen
-						name="Modal"
-						component={Modal}
-						options={{ presentation: "modal", headerLeft: () => null }}
-					/>
-				</Stack.Navigator>
-			</NavigationContainer>
-		);
-	}
-	
+  return <NavigationContainer>{signIn ? <AppRoutes /> : <AuthRoutes />}</NavigationContainer>;
+}
